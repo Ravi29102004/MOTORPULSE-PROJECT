@@ -403,3 +403,25 @@ The next major development step is **real sensor integration followed by Edge AI
 **Concept:** Retrofittable Industrial Edge-IoT Motor Health Monitoring
 
 > **Make the existing motor intelligent.**
+
+
+
+
+**********************************************=========================***********************
+Normal Condition
+
+
+<img width="1280" height="948" alt="image" src="https://github.com/user-attachments/assets/0060d4d5-bb78-4acf-a8f4-151e26f4d3a7" />
+
+
+
+
+
+Alert Condition
+
+
+
+
+<img width="1280" height="948" alt="image" src="https://github.com/user-attachments/assets/81c1159e-7e95-47a6-aa4f-feeacd1834db" />
+
+
