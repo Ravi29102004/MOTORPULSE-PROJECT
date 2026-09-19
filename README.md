@@ -1,408 +1,540 @@
-# MOTORPULSE ⚡
+# MOTORPULSE ⚙️
 
 ### Retrofittable Industrial Edge-IoT Smart Automation & Machine Health Monitoring Controller
 
-> **Make the existing motor intelligent.**
-> *Every motor has a fingerprint. MOTORPULSE learns it.*
+**Team Name - Spark Innovators**
 
-**Team Name:** Spark Innovators
-
----
-
-## 📌 Overview
-
-**MOTORPULSE** is a retrofit-first Industrial IoT and Edge AI controller designed to monitor the health of existing industrial induction motors without replacing the existing motor or machine infrastructure.
-
-The system collects important motor parameters such as:
-
-* ⚡ Current
-* 🌡️ Temperature
-* 📳 Vibration / Acceleration
-
-An **ESP32-based edge controller** processes the sensor data locally and identifies abnormal operating conditions.
-
-The system can generate alerts based on predefined thresholds and can later be extended with an Edge AI model for motor-specific anomaly detection.
+> **“Make the existing motor intelligent.”**
+> **“Every motor has a fingerprint. MOTORPULSE learns it.”**
 
 ---
 
-## 🎯 Objective
+## 📌 Project Overview
 
-The main objective of MOTORPULSE is to provide an affordable intelligence layer for existing industrial motors.
+**MOTORPULSE** is a retrofittable Industrial Edge-IoT smart automation and machine health monitoring controller designed to monitor the health of existing industrial induction motors without requiring major modifications to the existing motor infrastructure.
 
-Instead of replacing conventional motors with expensive smart motors, MOTORPULSE can be retrofitted onto existing equipment to provide:
+The system continuously monitors:
+
+* ⚡ Motor Current
+* 🌡️ Motor Temperature
+* 📳 Motor Vibration
+
+The collected sensor data is processed at the **edge using an ESP32 controller**. MOTORPULSE identifies abnormal operating conditions and classifies the machine condition into **three severity levels**:
 
 ```text
-Existing Motor
-      ↓
-Sensors
-      ↓
-ESP32 Edge Controller
-      ↓
-Data Processing
-      ↓
-Motor Health Analysis
-      ↓
-NORMAL / ALERT
-      ↓
-Local Alert / Future Cloud or Server
+NORMAL → WARNING → CRITICAL
+```
+
+Based on the severity, the system provides an appropriate response such as:
+
+```text
+NORMAL    → Continue Operation
+WARNING   → Inspect / De-load
+CRITICAL  → Safe Stop
 ```
 
 ---
 
-## 🔧 Current Prototype
+# 🎯 Problem Statement
 
-The current prototype is developed using:
+Industrial motors are critical components of manufacturing and automation systems. Unexpected motor failures can lead to:
 
-| Component        | Purpose                          |
-| ---------------- | -------------------------------- |
-| ESP32 Dev Module | Edge controller                  |
-| MPU6050          | Vibration / acceleration sensing |
-| DHT22            | Temperature sensing              |
-| Potentiometer    | Simulated current sensor         |
-| OLED SSD1306     | Local monitoring display         |
-| Buzzer           | Fault / alert indication         |
+* Production downtime
+* Equipment damage
+* Maintenance costs
+* Safety risks
+* Energy/resource wastage
 
----
+Traditional monitoring systems can be expensive and may require replacement or modification of existing industrial equipment.
 
-## 🧠 Monitoring Parameters
-
-### 1. Current Monitoring
-
-The prototype currently uses a potentiometer to simulate motor current.
-
-```text
-Current > 3 A
-       ↓
-     ALERT
-       ↓
-    BUZZER
-```
-
-For a real industrial deployment, the potentiometer can be replaced by an appropriate **isolated current sensor / split-core CT sensor**.
-
-### 2. Temperature Monitoring
-
-The DHT22 provides temperature data.
-
-Current prototype threshold:
-
-```text
-Temperature > 40°C
-        ↓
-      ALERT
-```
-
-### 3. Vibration / Acceleration Monitoring
-
-The MPU6050 measures acceleration along the X, Y and Z axes.
-
-The prototype calculates the acceleration magnitude to obtain a basic vibration indicator.
-
-```text
-Acceleration
-      ↓
-X + Y + Z measurements
-      ↓
-Magnitude calculation
-      ↓
-Threshold comparison
-      ↓
-ALERT
-```
-
-Current prototype threshold:
-
-```text
-Vibration > 12 m/s²
-        ↓
-      ALERT
-```
+MOTORPULSE aims to provide a **retrofittable and intelligent monitoring solution** that can be attached to existing motors and continuously monitor their operating condition.
 
 ---
 
-## 🚨 Alert System
+# 💡 Proposed Solution
 
-If any monitored parameter crosses its configured threshold:
+MOTORPULSE uses multiple sensors connected to an ESP32-based edge controller.
 
-```text
-Current > Limit
-      OR
-Temperature > Limit
-      OR
-Vibration > Limit
-      ↓
-    ALARM ON
-      ↓
-    BUZZER ON
-```
-
-The OLED displays:
+### Sensor Layer
 
 ```text
-STATUS: ALERT!
+Current Sensor
+      │
+      ├──────────────┐
+      │              │
+MPU6050           DHT22
+Vibration        Temperature
+      │              │
+      └──────┬───────┘
+             ↓
+           ESP32
+             ↓
+      Edge Processing
+             ↓
+      Severity Detection
 ```
 
-Otherwise:
-
-```text
-STATUS: NORMAL
-```
+The system processes sensor readings locally and determines the current health state of the motor.
 
 ---
 
-## 🖥️ OLED Display
+# 🔧 Hardware Components
 
-The OLED provides real-time local information:
-
-```text
-MOTORPULSE
-----------------
-Current : 2.15 A
-Vib     : 9.84
-Temp    : 25.0 C
-----------------
-STATUS: NORMAL
-```
+| Component                                 | Purpose                             |
+| ----------------------------------------- | ----------------------------------- |
+| ESP32                                     | Main edge controller                |
+| MPU6050                                   | Vibration / acceleration monitoring |
+| DHT22                                     | Temperature monitoring              |
+| Current Sensor / Potentiometer Simulation | Motor current monitoring            |
+| SSD1306 OLED                              | Local monitoring display            |
+| Buzzer                                    | Audible fault indication            |
+| Wi-Fi                                     | Future IoT/cloud connectivity       |
 
 ---
 
-## 🧪 Simulation
-
-The prototype is being developed and tested using **Wokwi**.
-
-Simulation components include:
-
-* ESP32
-* OLED SSD1306
-* MPU6050
-* DHT22
-* Potentiometer
-* Buzzer
-
----
-
-## 🛠️ Software & Development Tools
+# 🖥️ Software & Technologies
 
 * C++
 * Arduino Framework
+* ESP32
 * PlatformIO
-* VS Code
 * Wokwi
-* Git
-* GitHub
+* Arduino Wire / I2C
+* Adafruit SSD1306
+* Adafruit GFX
+* Adafruit MPU6050
+* DHT Sensor Library
+* Git & GitHub
+
+### Planned Backend
+
+* Java
+* Spring Boot
+* REST API
+* JPA / Hibernate
+* PostgreSQL / MySQL
 
 ---
 
-## 📁 Project Structure
+# 📊 Real-Time Parameters
+
+MOTORPULSE currently monitors three major parameters.
+
+### 1. Current
+
+Current indicates the electrical load of the motor.
 
 ```text
-MOTORPULSE/
-│
-├── include/
-├── lib/
-├── src/
-│   └── main.cpp
-├── test/
-│
-├── diagram.json
-├── platformio.ini
-├── wokwi.toml
-├── .gitignore
-└── README.md
+Normal       < 3 A
+Warning      3 A – 4 A
+Critical     > 4 A
+```
+
+### 2. Temperature
+
+Temperature helps identify excessive heating.
+
+```text
+Normal       < 40°C
+Warning      40°C – 50°C
+Critical     > 50°C
+```
+
+### 3. Vibration
+
+MPU6050 measures acceleration and provides a vibration-related magnitude.
+
+```text
+Normal       < 12 m/s²
+Warning      12 – 15 m/s²
+Critical     > 15 m/s²
+```
+
+> These thresholds are currently configured for the prototype/simulation and can be calibrated according to the characteristics of a real industrial motor.
+
+---
+
+# 🚨 Three-Level Severity System
+
+MOTORPULSE now uses a **three-level severity classification** instead of a simple ON/OFF alarm.
+
+## 🟢 Level 1 — NORMAL
+
+The monitored parameters remain within their safe operating range.
+
+```text
+Severity: NORMAL
+Action: Continue Operation
+Buzzer: OFF
+```
+
+OLED example:
+
+```text
+LEVEL: NORMAL
+ACT: NORMAL
 ```
 
 ---
 
-## ⚙️ PlatformIO Configuration
+## 🟡 Level 2 — WARNING
+
+One or more parameters have crossed the warning threshold but have not reached the critical threshold.
 
 ```text
-Board: ESP32 Dev Module
-Framework: Arduino
-Platform: Espressif 32
-```
-
-Build:
-
-```bash
-pio run
-```
-
----
-
-## ▶️ Running the Simulation
-
-### 1. Build the firmware
-
-```bash
-pio run
-```
-
-### 2. Start Wokwi
-
-In VS Code:
-
-```text
-Command Palette
-→ Wokwi: Start Simulator
-```
-
-### 3. Serial Monitor
-
-```text
-115200 baud
+Severity: WARNING
+Action: INSPECT / DE-LOAD
+Buzzer: Warning indication
 ```
 
 Example:
 
 ```text
-Current: 1.25 A | Vibration: 9.82 | Temperature: 25.0 C | Alarm: OFF
+Current: 3.20 A
+Temperature: 44.3 C
+Vibration: 9.37 m/s²
+
+Severity: WARNING
+Action: INSPECT
+```
+
+The operator can inspect the motor and take preventive action before the condition becomes critical.
+
+---
+
+## 🔴 Level 3 — CRITICAL
+
+One or more parameters have reached a critical threshold.
+
+```text
+Severity: CRITICAL
+Action: SAFE STOP
+Buzzer: Continuous alarm
+```
+
+Example:
+
+```text
+Current: 4.50 A
+Temperature: 55.0 C
+Vibration: 16.20 m/s²
+
+Severity: CRITICAL
+Action: SAFE STOP
+```
+
+The system can trigger a local alarm and, in a future industrial implementation, initiate a controlled shutdown/de-load mechanism.
+
+---
+
+# 🔔 Alarm & Buzzer Logic
+
+The prototype uses the following response:
+
+```text
+                 SENSOR DATA
+                      │
+                      ↓
+              Severity Analysis
+                      │
+          ┌───────────┼───────────┐
+          ↓           ↓           ↓
+       NORMAL       WARNING     CRITICAL
+          │           │           │
+          ↓           ↓           ↓
+       No Alarm     Inspect     Safe Stop
+                      │           │
+                      ↓           ↓
+                   Warning      Buzzer
+                               / Alarm
+```
+
+The buzzer is activated for critical conditions using the ESP32 buzzer output.
+
+---
+
+# 📺 OLED Monitoring
+
+The SSD1306 OLED provides local real-time information.
+
+Example:
+
+```text
+MOTORPULSE
+----------------
+Current : 1.49 A
+Vib     : 9.37
+Temp    : 44.3 C
+----------------
+LEVEL: WARNING
+ACT: INSPECT
+```
+
+For a critical condition:
+
+```text
+MOTORPULSE
+----------------
+Current : 4.50 A
+Vib     : 16.20
+Temp    : 55.0 C
+----------------
+LEVEL: CRITICAL
+ACT: SAFE STOP
 ```
 
 ---
 
-## 🔌 Pin Configuration
+# 💻 Serial Monitoring
 
-| Device                         | ESP32 Pin |
-| ------------------------------ | --------- |
-| OLED SDA                       | GPIO 21   |
-| OLED SCL                       | GPIO 22   |
-| MPU6050 SDA                    | GPIO 21   |
-| MPU6050 SCL                    | GPIO 22   |
-| DHT22 DATA                     | GPIO 15   |
-| Current Sensor / Potentiometer | GPIO 34   |
-| Buzzer                         | GPIO 25   |
+The ESP32 also sends real-time sensor information through the Serial Monitor.
 
-OLED and MPU6050 share the same I²C bus.
+Example:
 
----
+```text
+Current: 1.49 A | Vibration: 9.37 m/s2 | Temperature: 44.3 C | Severity: WARNING | Action: INSPECT
+```
 
-## 🔮 Future Development
+Critical example:
 
-* [ ] Real split-core CT current sensor
-* [ ] Real industrial vibration sensor
-* [ ] Improved temperature sensing
-* [ ] Motor-specific baseline learning
-* [ ] Edge AI anomaly detection
-* [ ] Motor health score
-* [ ] Fault classification
-* [ ] Severity levels
-* [ ] Inspect / De-load / Safe Stop recommendations
-* [ ] Local server integration
-* [ ] MQTT communication
-* [ ] Web dashboard
-* [ ] Historical sensor data
-* [ ] Predictive maintenance
-* [ ] Cloud integration
+```text
+Current: 4.50 A | Vibration: 16.20 m/s2 | Temperature: 55.0 C | Severity: CRITICAL | Action: SAFE STOP
+```
 
 ---
 
-## 🧠 Edge AI Vision
+# 🧪 Wokwi Simulation
 
-The long-term goal is to move from simple threshold-based monitoring toward a motor-specific health model.
+The current prototype is simulated using **Wokwi**.
+
+The simulation includes:
+
+```text
+ESP32
+ │
+ ├── MPU6050
+ │
+ ├── DHT22
+ │
+ ├── Potentiometer
+ │
+ ├── SSD1306 OLED
+ │
+ └── Buzzer
+```
+
+### Simulation Features
+
+* Real-time current simulation
+* Temperature simulation
+* Vibration/acceleration simulation
+* OLED monitoring
+* Severity detection
+* Buzzer alarm
+* Serial monitoring
+
+---
+
+# 🏗️ System Architecture
+
+```text
+              INDUSTRIAL MOTOR
+                     │
+          ┌──────────┼──────────┐
+          ↓          ↓          ↓
+       Current    Vibration  Temperature
+        Sensor      MPU6050      DHT22
+          │          │          │
+          └──────────┼──────────┘
+                     ↓
+                  ESP32
+                     │
+             Edge Processing
+                     │
+             Severity Analysis
+                     │
+        ┌────────────┼────────────┐
+        ↓            ↓            ↓
+      NORMAL       WARNING     CRITICAL
+        │            │            │
+        ↓            ↓            ↓
+   Operation      Inspect      Safe Stop
+                     │
+                     ↓
+              OLED + Buzzer
+```
+
+---
+
+# 🌐 Future IoT Architecture
+
+The next stage of MOTORPULSE is to connect the ESP32 to a backend server.
+
+```text
+ESP32
+  │
+  │ Wi-Fi
+  ↓
+Spring Boot REST API
+  │
+  ↓
+Service Layer
+  │
+  ↓
+JPA / Hibernate
+  │
+  ↓
+PostgreSQL / MySQL
+  │
+  ↓
+MOTORPULSE Dashboard
+```
+
+The backend will store:
+
+* Machine information
+* Sensor readings
+* Severity events
+* Alert history
+* Maintenance records
+* Machine health history
+
+---
+
+# 🤖 Future Edge AI
+
+The current prototype uses threshold-based severity detection.
+
+Future versions will introduce **Edge AI / TinyML**.
 
 ```text
 Sensor Data
-     ↓
-Current + Vibration + Temperature
      ↓
 Feature Extraction
      ↓
 Motor Fingerprint
      ↓
-Edge AI Model
+TinyML / Edge AI
      ↓
 Anomaly Detection
      ↓
-Severity
-     ↓
-Action
+NORMAL / WARNING / CRITICAL
 ```
 
-Possible output:
+The objective is to learn the normal operating fingerprint of each motor and detect deviations from its normal behavior.
+
+---
+
+# 🔮 Future Enhancements
+
+* [ ] Spring Boot backend
+* [ ] REST API
+* [ ] PostgreSQL/MySQL integration
+* [ ] JPA/Hibernate
+* [ ] React dashboard
+* [ ] Real-time machine dashboard
+* [ ] Historical sensor graphs
+* [ ] Alert history
+* [ ] Maintenance management
+* [ ] MQTT communication
+* [ ] TinyML / Edge AI
+* [ ] Motor-specific health fingerprint
+* [ ] Predictive maintenance
+* [ ] Industrial-grade sensors
+* [ ] Automatic de-loading
+* [ ] Safe shutdown mechanism
+* [ ] Cloud deployment
+* [ ] Multi-machine monitoring
+
+---
+
+# ⚠️ Current Limitations
+
+1. The current prototype is primarily a simulation/prototype implementation.
+2. The current thresholds are fixed and need calibration for real industrial motors.
+3. MPU6050 is being used as a prototype vibration sensor; industrial-grade vibration sensors would provide more reliable measurements.
+4. Current sensing is currently simulated using a potentiometer in Wokwi.
+5. Edge AI/TinyML is planned for future development.
+6. The current prototype does not directly control an industrial motor.
+7. Industrial electrical isolation and protection mechanisms are required before real-world deployment.
+8. Backend/cloud connectivity is part of the planned next stage.
+
+---
+
+# 📁 Project Structure
 
 ```text
-NORMAL
-   ↓
-INSPECT
-   ↓
-DE-LOAD
-   ↓
-SAFE STOP
+MOTORPULSE/
+│
+├── src/
+│   └── main.cpp
+│
+├── diagram.json
+├── platformio.ini
+├── README.md
+│
+└── .gitignore
 ```
 
 ---
 
-## 🌐 Local Server Integration
+# 🚀 Current Development Status
 
-MOTORPULSE can be extended so that the ESP32 performs local processing while sending selected sensor data to a local server.
+### Completed ✅
 
-```text
-Industrial Motor
-       ↓
-     Sensors
-       ↓
-      ESP32
-   Edge Processing
-       ↓
-   Local Network
-       ↓
-   Local Server
-       ↓
-   Database
-       ↓
-   Dashboard
-```
+* ESP32 controller setup
+* PlatformIO project
+* Wokwi simulation
+* MPU6050 integration
+* DHT22 integration
+* Current simulation
+* SSD1306 OLED integration
+* Serial monitoring
+* Real-time sensor monitoring
+* Fault detection
+* Three-level severity classification
+* NORMAL / WARNING / CRITICAL states
+* Action classification
+* Buzzer alarm
+* GitHub project setup
 
----
+### Currently Planned 🔄
 
-## ⚠️ Safety Note
-
-The current Wokwi prototype is a simulation and development model.
-
-For real industrial motors, **never connect motor mains voltage directly to the ESP32 or prototype electronics**.
-
-Real deployment requires appropriate:
-
-* Electrical isolation
-* Current sensing
-* Protection circuits
-* Industrial-rated sensors
-* Power supply
-* Enclosure
-* Grounding
-* Overcurrent protection
-* Emergency-stop mechanisms
+* Spring Boot backend
+* REST API
+* Database integration
+* IoT data transmission
+* Web dashboard
+* Edge AI / TinyML
+* Predictive maintenance
 
 ---
 
-## 📌 Project Status
+# 👥 Team
 
-**Current Stage:** Prototype / Simulation
+**Team Name - Spark Innovators**
 
-```text
-✅ Current monitoring simulation
-✅ Temperature monitoring
-✅ Acceleration monitoring
-✅ OLED display
-✅ Threshold-based alarm
-✅ Buzzer alert
-✅ Serial monitoring
-✅ Wokwi simulation
-```
+### Project
 
-The next major development step is **real sensor integration followed by Edge AI-based motor anomaly detection**.
+**MOTORPULSE**
+
+### Theme
+
+**Smart Resource Conservation**
+
+### Category
+
+**Hardware / Industrial IoT**
 
 ---
 
-## 👥 Team
+# 🏁 Vision
 
-**Team Name:** Spark Innovators
-
-**Project:** MOTORPULSE
-
-**Concept:** Retrofittable Industrial Edge-IoT Motor Health Monitoring
+MOTORPULSE aims to transform existing industrial motors into **intelligent, connected and condition-aware machines** without requiring complete replacement of the existing infrastructure.
 
 > **Make the existing motor intelligent.**
+
+> **Every motor has a fingerprint. MOTORPULSE learns it.**
 
 
 
